@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOM</title>
+</head>
+
+<body>
+    <script>
+        // 将NodeList转换为数组
+        function convertToArray(nodes) {
+            var array = null;
+            try {
+                array = Array.prototype.slice.call(nodes, 0); // 针对非IE浏览器
+            } catch (ex) {
+                array = new Array();
+                for (var i = 0, len = nodes.length; i < len; i++) {
+                    array.push(node[i]); // 针对IE浏览器
+                }
+            }
+            return array;
+        }
+
+        // 插入后成为最后一个子节点
+        returnNode = someNode.insertBefore(newNode, null);
+        alert(newNode == someNode.lastChild); // true
+
+        // 插入后成为第一个子节点
+        var returnedNode = someNode.insertBefore(newNode, someNode.firstChild);
+        alert(returnedNode == newNode); // true
+        alert(newNode == someNode.firstChild); // true
+
+        // 插入到最后一个子节点的前面
+        returnedNode = someNode.insertBefore(newNode, someNode.lastChild);
+        alert(newNode == someNode.childNodes[soemNode.childNodes.length - 2]); // true
+
+        // 替换第一个节点
+        returnedNode = someNode.replaceChild(newNode, someNode.firstChild);
+
+        // 替换最后一个子节点
+        returnedNode = someNode.replaceChild(newNode, someNode.lastChild);
+
+        // 移除第一个子节点
+        formerFirstChild = someNode.removeChild(someNode.firstChild);
+
+        // 移除最后一个子节点
+        formerLastChild = someNode.removeChild(someNode.lastChild);
+
+        // 取得对html元素的引用
+        var html = document.documentElement;
+        var html = document.childNodes[0];
+        var html = document.firstChild;
+
+        // 取得body元素的引用
+        var body = document.body;
+
+        // 取得对<!DOCTYPE>元素的引用
+        var doctype = document.doctype;
+
+        // 取得文档标题
+        var originalTitle = document.title;
+        // 设置文档标题
+        document.title = 'New Page Title';
+
+        // 取得完整的URL
+        var url = document.URL;
+        // 取得域名
+        var domain = document.domain;
+        // 取得来源页面的URL
+        var referrer = document.referrer;
+
+        // 取得页面所有的<img>标签
+        var images = document.getElementsByTagName('img');
+        alert(iamges.length); // 输出图像的数量
+        alert(images[0].src); // 输出第一个图像元素的src
+        alert(images.item(0).src); // 输出第一个图像元素的src
+
+        // 访问元素的标签名 如： <div id="myDiv"></div>
+        var div = document.getElementById('myDiv');
+        alert(div.tagName); // 'DIV'
+        alert(div.tagName == nodeName); // true
+
+
+        div.setAttribute('id', 'someId');
+        div.setAttribute('class', 'someClass');
+
+        // 取得元素的id特性
+        var id = element.attributes.getNamedItem('id').nodeValue;
+        var id = element.attributes['id'].nodeValue;
+
+        // 设置元素的id特性
+        element.attributes['id'].nodeValue = 'someId';
+
+        // 删除特性的Attr节点
+        var oldAttr = element.attributes.removeNamedItem('id');
+
+        // 传入一个特性节点
+        element.attributes.setNamedItem(newAttr);
+
+        function outputAttributes(element) {
+            var pairs = new Array(),
+                attrName,
+                attrValue,
+                i,
+                len;
+            for (i = 0, len = element.attributes.length; i < len; i++) {
+                attrName = element.attributes[i].nodeName;
+                attrValue = element.attributes[i].nodeValue;
+                if (element.attributes[i].specified) {
+                    pairs.push(attrName + "=\"" + attrValue + "\"");
+                }
+            }
+            return pairs.join(' ');
+        }
+
+        // 获取对文本的引用
+        var textNode = div.firstChild;
+        var textNode = div.childNodes[0];
+        // 修改文本
+        div.firstChild.nodeValue = 'some other text';
+
+        var element = document.createElement('div');
+        element.className = 'myClass';
+
+        var textNode = document.createTextNode('Some Text');
+        element.appendChild(textNode);
+
+        var anotherText = document.createTextNode('Another Some Text');
+        element.appendChild(anotherText);
+
+        document.body.appendChild(element);
+
+        alert(element.childNodes.length); // 2
+        element.normalize();
+        alert(element.childNodes.length); // 1
+        alert(element.firstChild.nodeValue); // 'Some TextAnother Some Text'
+
+        var element = document.createElement('div');
+        element.className = 'message';
+
+        var textNode = document.createTextNode('Hello World!');
+        element.appendChild(element);
+
+        var newNode = element.firstChild.splitText(5);
+        alert(element.firstChild.nodeValue); // 'Hello'
+        alert(newNode.nodeValue); // ' World!'
+        alert(element.childNodes.length); // 2
+
+        var attr = document.createAttribute('align');
+        attr.value = 'left';
+        element.setAttributeNode(attr);
+
+        function loadScript(url) {
+            var script = docuemnt.createElement('script');
+            script.type = 'text/javascript';
+            script.src = url;
+            document.body.appendChild(script);
+        }
+
+        function loadScriptString(code) {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+
+            try {
+                script.appendChild(document.createTextNode(code));
+            } catch (ex) {
+                script.text = code;
+            }
+            document.body.appendChild(script);
+        }
+        loadScriptString('function sayHi(){alert("hi");');
+
+        function loadStyle(url) {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = url;
+            var head = document.getElementsByTagName('head')[0];
+            head.appendChild(link);
+        }
+        loadStyle('style.css');
+
+        function loadStyleString(css) {
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            try {
+                style.appendChild(document.createTextNode(css));
+            } catch (ex) {
+                style.styleSheet.cssText = css;
+            }
+            var head = document.getElementsByTagName('head')[0];
+            head.appendChild(style);
+        }
+        loadStyleString('body{background-color:red}');
+    </script>
+</body>
+
+</html>
